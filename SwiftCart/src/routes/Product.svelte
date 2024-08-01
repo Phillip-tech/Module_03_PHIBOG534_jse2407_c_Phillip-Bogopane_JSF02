@@ -26,7 +26,7 @@
     <div class="flex items-center justify-between p-4">
       <Link to="/" class="text-blue-600 hover:text-blue-800">Back to products</Link>
     </div>
-    <img class="p-8 rounded-t-lg mx-auto" src={product.image} alt="product image" />
+    <img class="p-8 rounded-t-lg mx-auto" src={product.image} alt="product image" style="max-width: 250px;" />
     <div class="px-5 pb-5">
       <h3 class="text-xl font-semibold tracking-tight text-gray-900">{product.title}</h3>
       <p class="text-gray-700 mt-4">{product.description}</p>
