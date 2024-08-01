@@ -1,13 +1,16 @@
 <script>
   export let navbarOpen = false;
-  export let toggleNavbar;
+  export let toggleNavbar = () => {
+    navbarOpen = !navbarOpen;
+    console.log(navbarOpen); 
+  };
 </script>
 
 <header class="sticky top-0 bg-gray-500 z-50">
   <nav class="border-gray-200">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <a href="/" class="flex items-center space-x-3">
-        <img src="/online-shop.png" class="h-8" alt="logo">
+        <img src="/online-shop.png" class="h-8" alt="/online-shop.png">
         <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">SwiftCart</span>
       </a>
       <button on:click={toggleNavbar} class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden">
@@ -36,4 +39,21 @@
     top: 0;
     z-index: 50;
   }
+ 
+  /* CSS for responsive design */
+  @media screen and (max-width: 600px) {
+    /* Styles for screens up to 600px wide */
+    /* For example, you can adjust the layout for smaller screens */
+  }
+
+  @media screen and (min-width: 601px) and (max-width: 1024px) {
+    /* Styles for screens between 601px and 1024px wide */
+    /* Adjust the layout for medium-sized screens */
+  }
+
+  @media screen and (min-width: 1025px) {
+    /* Styles for screens wider than 1024px */
+    /* Modify the layout for larger screens */
+  }
+
 </style>

@@ -5,9 +5,11 @@
   import Header from './lib/components/Header.svelte';
   import Footer from './lib/components/Footer.svelte';
 
+  let isNavbarOpen = false;
+
   // Define a function to handle toggling the navbar
   function toggleNavbar() {
-   
+    isNavbarOpen = !isNavbarOpen;
   }
 </script>
 
