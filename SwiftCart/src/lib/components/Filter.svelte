@@ -1,40 +1,39 @@
 <script>
-    import { writable } from 'svelte/store';
-    import { categories, fetchProducts, filterItem, sortOption } from '../stores.js'; // Corrected import statement
+  import { writable } from 'svelte/store';
+  import { categories, fetchProducts, filterItem, sortOption } from '../stores.js';
 
-    const dropdownOpen = writable(false);
-    const sortDropdownOpen = writable(false);
-    const searchTerm = writable(''); // Define the searchTerm store
+  const dropdownOpen = writable(false);
+  const sortDropdownOpen = writable(false);
+  const searchTerm = writable('');
+  const selectedCategory = writable('All categories'); // Define and initialize selectedCategory
 
-    const toggleDropdown = () => {
-      dropdownOpen.update(value => !value);
-    };
+  const toggleDropdown = () => dropdownOpen.update(value => !value);
+  const toggleSortDropdown = () => sortDropdownOpen.update(value => !value);
 
-    const toggleSortDropdown = () => {
-      sortDropdownOpen.update(value => !value);
-    };
+  const handleFilter = (category) => {
+    selectedCategory.set(category); // Update selectedCategory
+    filterItem.set(category);
+    dropdownOpen.set(false);
+    fetchProducts();
+  };
 
-    const handleFilter = (category) => {
-      filterItem.set(category);
-      dropdownOpen.set(false);
-      fetchProducts();
-    };
+  const handleSort = (option) => {
+    sortOption.set(option);
+    sortDropdownOpen.set(false);
+    fetchProducts();
+  };
 
-    const handleSort = (option) => {
-      sortOption.set(option);
-      sortDropdownOpen.set(false);
-      fetchProducts();
-    };
+  const resetFilters = () => {
+    selectedCategory.set('All categories'); // Reset selectedCategory
+    filterItem.set('All categories');
+    sortOption.set('Reset');
+    fetchProducts();
+  };
 
-    const resetFilters = () => {
-      filterItem.set('All categories');
-      sortOption.set('Reset');
-      fetchProducts();
-    };
+  const handleSearch = () => fetchProducts();
 
-    const handleSearch = () => {
-      fetchProducts();
-    };
+  const changeCategory = (event) => selectedCategory.set(event.target.value);
+  const changeSortOption = (event) => sortOption.set(event.target.value);
 </script>
 
 <form on:submit|preventDefault={handleSearch} class="flex flex-wrap gap-4 relative mt-4">
@@ -51,50 +50,47 @@
 
   <!-- Category Dropdownlist -->
   {#if $dropdownOpen}
-    <div class="absolute z-10 top-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-      <ul class="py-2 text-sm text-gray-700">
+  <div class="absolute z-10 top-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+    <ul class="py-2 text-sm text-gray-700">
+      {#each $categories as category}
         <li>
-          <button on:click={() => handleFilter('All categories')} on:keydown={(e) => e.key === 'Enter' && handleFilter('All categories')} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">All categories</button>
+          <button on:click={() => handleFilter(category)} on:keydown={(e) => e.key === 'Enter' && handleFilter(category)} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">{category}</button>
         </li>
-        {#each $categories as category}
-          <li>
-            <button on:click={() => handleFilter(category)} on:keydown={(e) => e.key === 'Enter' && handleFilter(category)} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">{category}</button>
-          </li>
-        {/each}
-      </ul>
-    </div>
+      {/each}
+    </ul>
+  </div>
   {/if}
 
-  <button on:click={toggleDropdown} type="button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200">
-    {$filterItem}
+  <button on:click={toggleDropdown} type="button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-gray-900  bg-blue-600 border border-gray-300 rounded-lg hover:bg-gray-200">
+    {$selectedCategory}
     <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 8l4 4 4-4" />
     </svg>
-  </button>
+  </button> 
 
-  <!-- Sort Dropdownlist -->
-  {#if $sortDropdownOpen}
-    <div class="absolute z-10 top-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 right-0">
-      <ul class="py-2 text-sm text-gray-700">
-        <li>
-          <button on:click={() => handleSort('Reset')} on:keydown={(e) => e.key === 'Enter' && handleSort('Reset')} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">Reset</button>
-        </li>
-        <li>
-          <button on:click={() => handleSort('Price: Low to High')} on:keydown={(e) => e.key === 'Enter' && handleSort('Price: Low to High')} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">Price: Low to High</button>
-        </li>
-        <li>
-          <button on:click={() => handleSort('Price: High to Low')} on:keydown={(e) => e.key === 'Enter' && handleSort('Price: High to Low')} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">Price: High to Low</button>
-        </li>
-      </ul>
-    </div>
-  {/if}
+<!-- Sort Dropdownlist -->
+{#if $sortDropdownOpen}
+<div class="absolute z-10 top-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 right-0"> 
+  <ul class="py-2 text-sm text-gray-700">
+    <li>
+      <button on:click={() => handleSort('Reset')} on:keydown={(e) => e.key === 'Enter' && handleSort('Reset')} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">Default</button>
+    </li>
+    <li>
+      <button on:click={() => handleSort('Price: Low to High')} on:keydown={(e) => e.key === 'Enter' && handleSort('Price: Low to High')} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">Price: Low to High</button>
+    </li>
+    <li>
+      <button on:click={() => handleSort('Price: High to Low')} on:keydown={(e) => e.key === 'Enter' && handleSort('Price: High to Low')} class="inline-flex w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">Price: High to Low</button>
+    </li>
+  </ul>
+</div>
+{/if}
 
-  <button on:click={toggleSortDropdown} type="button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200">
-    {$sortOption}
-    <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 8l4 4 4-4" />
-    </svg>
-  </button>
+<button on:click={toggleSortDropdown} type="button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 ml-auto"> <!-- Added ml-auto class -->
+  {$sortOption}
+  <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 8l4 4 4-4" />
+  </svg>
+</button>
 
   <!-- Reset button -->
   <button type="button" on:click={resetFilters} class="flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200">Reset</button>

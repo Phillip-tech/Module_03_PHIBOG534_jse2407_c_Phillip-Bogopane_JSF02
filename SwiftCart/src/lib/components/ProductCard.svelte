@@ -2,8 +2,8 @@
   export let product;
 </script>
 
-<a href={`/product/${product.id}`} class="border border-gray-200 rounded-lg p-4 bg-white shadow hover:shadow-lg transition-shadow">
-  <img src={product.image} alt={product.title} class="h-48 w-full object-contain rounded mb-4">
+<a href={`/product/${product.id}`} class="border border-gray-200 rounded-lg p-4 bg-white shadow-lg hover:shadow-2xl transition-shadow">
+  <img src={product.image} alt={product.title} class="h-48 w-full object-contain rounded mb-3">
   <h2 class="text-lg font-semibold mb-2">{product.title}</h2>
   <p class="text-gray-600 mb-2">{product.category}</p>
   <p class="text-gray-500 mb-2">{product.description}</p>
@@ -15,6 +15,7 @@
       </svg>
     </button>
   </div>
+  <button class="mt-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add to cart</button>
   <div class="flex items-center">
     <div class="flex items-center mr-2">
       <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">

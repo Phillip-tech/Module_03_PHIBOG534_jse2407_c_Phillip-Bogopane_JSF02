@@ -1,8 +1,8 @@
 <script>
-  import { products, loading, fetchProducts } from '../lib/stores.js';
+  import { filteredProducts, loading, fetchProducts } from '../lib/stores.js';
   import { Filter, ProductCard } from '../lib/components';
-
   import { onMount } from 'svelte';
+
   onMount(() => {
     fetchProducts();
   });
@@ -27,7 +27,7 @@
   </div>
 {:else}
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-    {#each $products as product}
+    {#each $filteredProducts as product}
       <ProductCard {product} />
     {/each}
   </div>
